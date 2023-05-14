@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
+import StudentTableHeaders from './StudentTableHeaders';
+import StudentTableRows from './StudentTableRows';
 
 function App() {
-
+  //set state while fetching student data
   const [isLoading, setLoading] = useState(true);
   const [students, setStudents] = useState([]);
 
+  /*fetch student data from api, then filter and sort the data before setting students state.
+    then change loading to false so that table components will render*/
   useEffect(() => {
     axios.get('/grades')
       .then(response => {
@@ -33,65 +37,10 @@ function App() {
   }, [])
 
   if (isLoading) {
-    //console.log("Still loading!!");
     return <div className='App'>Loading...</div>;
   }
 
-  function StudentTableHeaders({ tableHeaders }) {
-    //const tableHeaders = ['Name', 'Grade']
-    return (
-      <tr className='student-table-row'>
-        {tableHeaders.map((h, index) => {
-          return (
-            <th key={`student-table-header-${index}`} className='student-table-header'>{h}</th>
-          )
-        })}
-      </tr>
-    )
-  }
-
-  function StudentTableRows({ students }) {
-    //{`${s.first_name} + ${s.last_name}`} key={`student-table-name-cell-${s.id}`}
-    console.log(`Number of students in StudentTableRows: ${students.length}`);
-    return (
-      <>
-        {students.map((s) => {
-          let fullName = s.first_name + " " + s.last_name;
-          let grade = s.grade;
-          let id = s.id;
-          let textStyle;
-          if(grade >= 85)
-          {
-            textStyle = 'text-success';
-          }
-          if(grade < 85 && grade >= 65)
-          {
-            textStyle = 'text-body';
-          }
-          if(grade < 65)
-          {
-            textStyle = 'text-danger';
-          }
-          return (
-            <tr key={id} className='student-table-row'>
-              <StudentTableCell cellContent={fullName} />
-              <StudentTableCell cellContent={grade} nodeClass={textStyle}/>
-            </tr>
-          )
-        })}
-      </>
-    )
-  }
-
-  function StudentTableCell({ cellContent, nodeClass }) {
-    let content = cellContent;
-    return (
-        <td className={nodeClass}>
-          {content}
-        </td>
-    )
-  }
-
+  //returns full table
   return (
     <>
     <div id='student-grades-table-container'>
