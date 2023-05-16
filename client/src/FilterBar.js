@@ -5,7 +5,7 @@ function FilterBar ({filterCallback}) {
     return (
         <>
             <input 
-                placeholder='filter'
+                placeholder='Search'
                 onChange={e => filterCallback(e.target.value)}
             />
         </>
