@@ -20,18 +20,7 @@ function App() {
         console.log("Response data: ", response.data);
         let goodStudents = response.data.filter((student) => student.grade >= 50);
         goodStudents.sort((a,b) => {
-          const nameA = a.first_name.toUpperCase();
-          const nameB = b.first_name.toUpperCase();
-          if (nameA < nameB)
-          {
-            return -1;
-          }
-          if (nameA > nameB)
-          {
-            return 1;
-          }
-
-          return 0;
+          return a.first_name.localeCompare(b.first_name);
         })
         setStudents(goodStudents);
         setFilteredStudents(goodStudents);
@@ -45,7 +34,7 @@ function App() {
   }
 
   //Tests for an int value, returns true or false
-  function testIfInt(value) {
+  const testIfInt = (value) => {
     console.log('Value in testIfInt: ', value);
     if(!isNaN(value))
     {
@@ -57,7 +46,7 @@ function App() {
   }
 
   //Callback function for TableFilter component
-  function tableFilter (userInput) {
+  const tableFilter = (userInput) => {
     let fStudents;
     console.log('User input was: ', userInput, '\nInput type was: ', typeof userInput);
     //If int value, filter by grade
@@ -73,8 +62,8 @@ function App() {
     {
       setFilteredStudents(() => {
         return students.filter((el) => {
-          let name = el.first_name + ' ' + el.last_name;
-          return name.toLowerCase().includes(userInput.toLowerCase());
+          let fullName = [el.first_name, el.last_name].join(' ');
+          return fullName.toLowerCase().includes(userInput.toLowerCase());
         })
       })
     }
